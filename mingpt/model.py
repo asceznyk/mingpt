@@ -22,4 +22,6 @@ class GPT1Config(GPTConfig):
     n_head = 12
     n_embd = 768
 
-
+class SelfAttention(nn.Module):
+    def __init__(config):
+        assert config.n_embd % config.n_head == 0
