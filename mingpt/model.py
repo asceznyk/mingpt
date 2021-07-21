@@ -25,3 +25,9 @@ class GPT1Config(GPTConfig):
 class SelfAttention(nn.Module):
     def __init__(config):
         assert config.n_embd % config.n_head == 0
+
+        self.key = nn.Linear(config.n_embd, config.n_embd)
+        self.query = nn.Linear(config.n_embd, config.n_embd)
+        self.value = nn.Linear(config.n_embd, config.n_embd)
+
+        self.proj = nn.Linear(config.n_embd, config.n_embd)
