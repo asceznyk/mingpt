@@ -31,3 +31,10 @@ class SelfAttention(nn.Module):
         self.value = nn.Linear(config.n_embd, config.n_embd)
 
         self.proj = nn.Linear(config.n_embd, config.n_embd)
+
+        self.attn_drop = nn.Dropout(config.attn_drop)
+        self.resid_drop = nn.Dropout(config.resid_drop)
+
+        self.register_buffer('mask', torch.tril(torch.ones(config.block_size, config.block_size)).view(1, 1, config.block_size, config.block_size))
+
+        self.n_head = config.n_head
