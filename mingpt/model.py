@@ -19,12 +19,12 @@ class GPTConfig:
 
 class GPT1Config(GPTConfig):
     n_layer = 12
-    n_head = 12
+    n_heads = 12
     n_embd = 768
 
 class MHSelfAttention(nn.Module):
     def __init__(config):
-        assert config.n_embd % config.n_head == 0
+        assert config.n_embd % config.n_heads == 0
 
         self.key = nn.Linear(config.n_embd, config.n_embd)
         self.query = nn.Linear(config.n_embd, config.n_embd)
@@ -35,18 +35,22 @@ class MHSelfAttention(nn.Module):
         self.attn_drop = nn.Dropout(config.attn_drop)
         self.resid_drop = nn.Dropout(config.resid_drop)
 
-        self.register_buffer('mask', torch.tril(torch.ones(config.block_size, config.block_size)).view(1, 1, config.block_size, config.block_size))
+        self.register_buffer(
+            'mask',
+            torch.tril(
+                torch.ones(config.block_size, config.block_size)
+            ).view(1, 1, config.block_size, config.block_size)
+        )
 
-        self.n_head = config.n_head
-
+        self.n_heads = config.n_heads
 
     def forward(self, x):
         B, S, E = x.size()
 
         #k, q, v (B, nh, S, hs) 
-        k = self.key(x).view(B, S, -1, E // self.n_head).transpose(1,2)
-        q = self.query(x).view(B, S, -1, E // self.n_head).transpose(1,2)
-        v = self.value(x).view(B, S, -1, E // self.n_head).transpose(1,2)
+        k = self.key(x).view(B, S, -1, E // self.n_heads).transpose(1,2)
+        q = self.query(x).view(B, S, -1, E // self.n_heads).transpose(1,2)
+        v = self.value(x).view(B, S, -1, E // self.n_heads).transpose(1,2)
 
         #(B, nh S, hs) * (B, nh, hs, S) -> (B, nh, S, S)
         attn = (q @ k.transpose(-2,-1) / math.sqrt(k.size(-1)))
