@@ -24,7 +24,7 @@ class GPT1Config(GPTConfig):
 
 class MHSelfAttention(nn.Module):
     def __init__(self, config):
-        super.__init__()
+        super().__init__()
         assert config.n_embd % config.n_heads == 0
 
         self.key = nn.Linear(config.n_embd, config.n_embd)
