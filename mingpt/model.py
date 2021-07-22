@@ -57,7 +57,6 @@ class MHSelfAttention(nn.Module):
         attn = (q @ k.transpose(-2,-1) / math.sqrt(k.size(-1)))
         attn = attn.masked_fill(self.mask[:,:,:S,:S] == 0, float('-inf'))
         attn = F.softmax(attn, dim=-1)
-        print(attn)
         attn = self.attn_drop(attn)
         attn = attn @ v # (B, nh, S, S) * (B, nh, S, hs) -> (B, nh, S, hs)
 
