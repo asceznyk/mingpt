@@ -1,7 +1,9 @@
 import torch
 
 from mingpt.model import *
-from mingpt.utils import set_seed
+from mingpt.utils import *
+
+set_seed(42)
 
 config = GPTConfig(1000, 3, n_heads=12, n_layer=12, n_embd=768)
 block = Block(config)
