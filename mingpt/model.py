@@ -61,6 +61,23 @@ class MHSelfAttention(nn.Module):
         attn = attn @ v # (B, nh, S, S) * (B, nh, S, hs) -> (B, nh, S, hs)
 
         y = attn.transpose(1,2).contiguous().view(B, S, E)
-
         return self.resid_drop(self.proj(y))
+
+class Block(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        self.ln1 = nn.LayerNorm(config.n_embd)
+        self.ln2 = nn.LayerNorm(config.n_embd)
+        self.mha = MHSelfAttention(config)
+        self.mlp = nn.Sequential(
+            nn.Linear(config.n_embd, 4 * config.n_embd),
+            nn.GELU(),
+            nn.Linear(4 * config.n_embd, config.n_embd),
+            nn.Dropout(config.resid_drop)
+        )
+
+    def forward(x):
+        x = x + self.mha(self.ln1(x))
+        x = x + self.mlp(self.ln2(x))
+        return x
 
