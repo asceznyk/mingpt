@@ -84,6 +84,11 @@ class GPT(nn.Module):
     def __init__(self, config):
         super.__init__()
 
+        self.tok_emb = nn.Linear(config.vocab_size, config.n_embd)
+        self.pos_emb = nn.Parameter(torch.zeros(1, config.block_size, config.n_embd))
+
+        self.drop = nn.Dropout(config.embd_drop)
+
         self.block_size = config.block_size
 
     def get_block_size(self):
@@ -91,6 +96,9 @@ class GPT(nn.Module):
 
     def forward(self, idx, targets=None):
         b, s = idx.size()
-        assert s <= self.block_size, 'Cannot forward, model block size exceeded'
+        assert s <= self.block_size, 'Cannot forward, model block size exceeded!'
+
+        token_emeddings = self.tok_emb(idx)
+        position_embeddings = self.pos_emb[:, :t, :]
 
 
