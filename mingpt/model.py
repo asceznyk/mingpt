@@ -101,4 +101,6 @@ class GPT(nn.Module):
         token_emeddings = self.tok_emb(idx)
         position_embeddings = self.pos_emb[:, :t, :]
 
+        return (token_emeddings + position_embeddings)
+
 
