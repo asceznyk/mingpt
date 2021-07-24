@@ -19,7 +19,7 @@ print(idx.size(), idx)
 
 y = gpt1(idx)
 
-print(y, y.size())
+print(y)
 
 
 
