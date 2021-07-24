@@ -23,7 +23,7 @@ print(idx.size(), idx)
 
 y, loss = gpt1(idx, trg)
 
-print(y, y.size(), loss)
+print(y, y.size(), loss.item())
 
 
 
