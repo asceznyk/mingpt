@@ -80,6 +80,14 @@ class Block(nn.Module):
         x = x + self.mha(self.ln1(x))
         return x + self.mlp(self.ln2(x))
 
+class GPT(nn.Module):
+    def __init__(self, config):
+        super.__init__()
 
+        self.block_size = config.block_size
+
+    def forward(self, idx, targets=None):
+        b, s = idx.size()
+        assert s <= self.block_size, 'Cannot forward, model block size exceeded'
 
 
