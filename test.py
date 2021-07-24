@@ -13,7 +13,7 @@ set_seed(42)
 seq_len = 5
 vocab_size = 60
 
-config = GPTConfig(vocab_size, set_len, n_heads=12, n_layer=12, n_embd=768)
+config = GPTConfig(vocab_size, seq_len, n_heads=12, n_layer=12, n_embd=768)
 gpt1 = GPT(config)
 
 idx = torch.tensor([[randint(0, vocab_size) for i in range(config.block_size)]])
