@@ -82,7 +82,7 @@ class Block(nn.Module):
 
 class GPT(nn.Module):
     def __init__(self, config):
-        super.__init__()
+        super().__init__()
 
         self.tok_emb = nn.Linear(config.vocab_size, config.n_embd)
         self.pos_emb = nn.Parameter(torch.zeros(1, config.block_size, config.n_embd))
