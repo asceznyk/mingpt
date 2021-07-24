@@ -86,6 +86,9 @@ class GPT(nn.Module):
 
         self.block_size = config.block_size
 
+    def get_block_size(self):
+        return self.block_size
+
     def forward(self, idx, targets=None):
         b, s = idx.size()
         assert s <= self.block_size, 'Cannot forward, model block size exceeded'
