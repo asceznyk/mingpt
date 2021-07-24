@@ -94,10 +94,23 @@ class GPT(nn.Module):
 
         self.head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
 
+        self.apply(self._init_weights)
+
         print("Number of parameters: %d".format(p.numel() for p in  self.parameters()))
 
     def get_block_size(self):
         return self.block_size
+
+    def _init_weights(self, module):
+        if isinstance(module, (nn.Linear, nn.Embedding)):
+            module.weight.data.normal_(mean=0.0, std=0.02)
+
+            if isinstance(module, nn.Linear) and module.bias is not None:
+                module.bias.data.zero_()
+
+        elif isinstance(module, nn.LayerNorm):
+            module.bias.data.zero_()
+            module.weight.data.fill_(1.0)
 
     def forward(self, idx, targets=None):
         B, S = idx.size()
