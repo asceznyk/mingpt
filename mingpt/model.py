@@ -96,7 +96,7 @@ class GPT(nn.Module):
 
         self.apply(self._init_weights)
 
-        print("Number of parameters: %d".format(p.numel() for p in  self.parameters()))
+        print("Number of parameters: %s".format(p.numel() for p in  self.parameters()))
 
     def get_block_size(self):
         return self.block_size
