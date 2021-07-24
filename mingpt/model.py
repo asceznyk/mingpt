@@ -95,11 +95,11 @@ class GPT(nn.Module):
         return self.block_size
 
     def forward(self, idx, targets=None):
-        b, s = idx.size()
-        assert s <= self.block_size, 'Cannot forward, model block size exceeded!'
+        B, S = idx.size()
+        assert S <= self.block_size, 'Cannot forward, model block size exceeded!'
 
         token_emeddings = self.tok_emb(idx)
-        position_embeddings = self.pos_emb[:, :t, :]
+        position_embeddings = self.pos_emb[:, :S, :]
 
         return (token_emeddings + position_embeddings)
 
