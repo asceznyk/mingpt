@@ -83,19 +83,16 @@ class Block(nn.Module):
 class GPT(nn.Module):
     def __init__(self, config):
         super().__init__()
+        self.block_size = config.block_size
 
         self.tok_emb = nn.Embedding(config.vocab_size, config.n_embd)
         self.pos_emb = nn.Parameter(torch.zeros(1, config.block_size, config.n_embd))
-
         self.drop = nn.Dropout(config.embd_drop)
 
         self.blocks = nn.Sequential(*[Block(config) for _ in range(config.n_layer)])
-
         self.ln_f = nn.LayerNorm(config.n_embd)
 
         self.head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
-
-        self.block_size = config.block_size
 
     def get_block_size(self):
         return self.block_size
@@ -111,10 +108,10 @@ class GPT(nn.Module):
         x = self.ln_f(x)
         logits = self.head(x) #logits.size (B, S, V) targets.size (B, S)
 
+        #logits.size (B * S, V) targets.size (B * S, 1)
         loss = None
         if targets is not None:
             loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1))
-            #logits.size (B * S, V) targets.size (B * S, 1)
 
         return logits, loss
 
