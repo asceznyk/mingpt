@@ -94,6 +94,8 @@ class GPT(nn.Module):
 
         self.head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
 
+        print("Number of parameters: %d".format(p.numel() for p in  self.parameters()))
+
     def get_block_size(self):
         return self.block_size
 
