@@ -89,6 +89,12 @@ class GPT(nn.Module):
 
         self.drop = nn.Dropout(config.embd_drop)
 
+        self.blocks = nn.Sequential(*[Block(config) for _ in range(config.n_layer)])
+
+        self.ln_f = nn.LayerNorm(config.n_embd)
+
+        self.head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
+
         self.block_size = config.block_size
 
     def get_block_size(self):
@@ -100,7 +106,16 @@ class GPT(nn.Module):
 
         token_emeddings = self.tok_emb(idx)
         position_embeddings = self.pos_emb[:, :S, :]
+        x = self.drop(token_emeddings + position_embeddings)
+        x = self.blocks(x)
+        x = self.ln_f(x)
+        logits = self.head(x) #logits.size (B, S, V) targets.size (B, S)
 
-        return (token_emeddings + position_embeddings)
+        loss = None
+        if targets is not None:
+            loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1))
+            #logits.size (B * S, V) targets.size (B * S, 1)
+
+        return logits, loss
 
 
