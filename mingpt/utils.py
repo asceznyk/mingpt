@@ -29,6 +29,9 @@ def sample(model, x, steps, temp=1.0,  sample=False, top_k=None):
         logits, _ = model(x_ctx)
         logits = logits[:, -1, :] / temp
 
+        if top_k is not None:
+            logits = top_k_logits(logits, top_k)
+
         probs = F.softmax(logits, dim=-1)
 
         if sample:
