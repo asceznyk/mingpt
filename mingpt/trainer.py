@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 import torch
 import torch.optim as optim
-from torch.optim.lr_scheduler import LamdaLR
+from torch.optim.lr_scheduler import LambdaLR
 from torch.utils.data.dataloader import DataLoader
 
 class TrainerConfig:
