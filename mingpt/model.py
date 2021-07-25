@@ -137,7 +137,7 @@ class GPT(nn.Module):
         inter = decay & no_decay
         union = decay | no_decay
         assert len(inter) == 0
-        assert len(params.keys() - union) == 0
+        assert len(d_params.keys() - union) == 0
 
         groups = [
             {
