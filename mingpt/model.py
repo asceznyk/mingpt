@@ -114,6 +114,44 @@ class GPT(nn.Module):
             module.bias.data.zero_()
             module.weight.data.fill_(1.0)
 
+
+    def configure_optimizers(self, train_cfg):
+        decay, no_decay = set(), set()
+        whitelist = (torch.nn.Linear, )
+        blacklist = (torch.nn.LayerNorm, torch.nn.Embedding)
+
+        for mn, m in self.named_modules():
+            for pn, p in self.named_parameters():
+                fpn = "%s.%s" % (mn, pn) if mn else pn
+
+                if pn.endswith('bias'):
+                    no_decay.add(fpn)
+                elif pn.endswith('weight') and isinstance(m, whitelist):
+                    decay.add(fpn)
+                elif pn.endswith('weight') and isinstance(m, blacklist):
+                    no_decay.add(fpn)
+
+        no_decay.add('pos_emb')
+
+        d_params = {pn: p for pn, p in self.named_parameters()}
+        inter = decay & no_decay
+        union = decay | no_decay
+        assert len(inter) == 0
+        assert len(params.keys() - union) == 0
+
+        groups = [
+            {
+            "params":[d_params[pn] for pn in sorted(list(decay))],
+            "weight_decay":train_cfg.weight_decay
+            },
+            {
+            "params":[d_params[pn] for pn in sorted(list(no_decay))],
+            "weight_decay":0.0
+            }
+        ]
+
+        return torch.optim.AdamW(groups, lr=train_cfg.learning_rate, betas=train_cfg.betas)
+
     def forward(self, idx, targets=None):
         B, S = idx.size()
         assert S <= self.block_size, 'Cannot forward, model block size exceeded!'
