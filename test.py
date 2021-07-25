@@ -27,6 +27,10 @@ top_logits = top_k_logits(logits[:, -1, :], k=4)
 
 print(f'changed to top k logits: {top_logits}')
 
+sampled_idxs = sample(gpt1, idx, steps=30)
+
+print(f'all the sampled indexes:  {sampled_idxs}')
+
 
 
 

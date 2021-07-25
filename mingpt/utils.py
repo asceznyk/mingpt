@@ -43,3 +43,6 @@ def sample(model, x, steps, temp=1.0,  sample=False, top_k=None):
 
     return x
 
+
+
+
