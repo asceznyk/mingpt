@@ -1,5 +1,5 @@
 import math
-import numplogits as np
+import numpy as np
 
 from random import randint
 
