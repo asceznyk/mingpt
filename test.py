@@ -27,6 +27,9 @@ sampled_idxs = sample(gpt1, idx, steps=30, top_k=5)
 
 print(f'all the sampled indexes:  {sampled_idxs}')
 
+train_cfg = TrainerConfig()
+gpt1.configure_optimizers(train_cfg)
+
 
 
 
