@@ -121,7 +121,7 @@ class GPT(nn.Module):
         blacklist = (torch.nn.LayerNorm, torch.nn.Embedding)
 
         for mn, m in self.named_modules():
-            for pn, p in self.named_parameters():
+            for pn, p in m.named_parameters():
                 fpn = "%s.%s" % (mn, pn) if mn else pn
 
                 if pn.endswith('bias'):
