@@ -11,14 +11,11 @@ from mingpt.trainer import *
 
 set_seed(42)
 
-block_size = 5
-vocab_size = 10
-
-config = GPTConfig(vocab_size, block_size, n_heads=12, n_layer=12, n_embd=768)
+config = GPTConfig(10, 5, n_heads=12, n_layer=12, n_embd=768)
 gpt1 = GPT(config)
 
-idx = torch.tensor([[randint(0, vocab_size) for i in range(config.block_size)]])
-trg = torch.tensor([[randint(0, vocab_size) for i in range(config.block_size)]])
+idx = torch.tensor([[randint(0, config.vocab_size-1) for i in range(config.block_size)]])
+trg = torch.tensor([[randint(0, config.vocab_size-1) for i in range(config.block_size)]])
 
 print(f'input: {idx}, size: {idx.size()}')
 
