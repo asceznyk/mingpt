@@ -43,3 +43,8 @@ class Trainer:
         if torch.cuda.is_available():
             self.device = torch.cuda.current_device()
             self.model = torch.nn.DataParallel(self.model).to(self.device)
+
+    def save_checkpoint(self):
+        raw_model = self.model.module if hasattr(self.model, "module") else self.model
+        logger.info("saving %s", self.config.ckpt_path)
+        torch.save(raw_model.state_dict(), self.config.ckpt_path)
