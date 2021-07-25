@@ -23,11 +23,7 @@ logits, loss = gpt1(idx, trg)
 
 print(f'logits: {logits}, size: {logits.size()} loss: {loss.item():.3f}')
 
-top_logits = top_k_logits(logits[:, -1, :], k=4)
-
-print(f'changed to top k logits: {top_logits}')
-
-sampled_idxs = sample(gpt1, idx, steps=30)
+sampled_idxs = sample(gpt1, idx, steps=30, top_k=5)
 
 print(f'all the sampled indexes:  {sampled_idxs}')
 
