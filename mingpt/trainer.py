@@ -32,3 +32,14 @@ class TrainerConfig:
             setattr(self, k, v)
 
 
+class Trainer:
+    def __init__(self, model, train_dataset, test_dataset, config):
+        self.model = model
+        self.train_dataset = train_dataset
+        self.test_dataset = test_dataset
+        self.config = config
+
+        self.device = 'cpu'
+        if torch.cuda.is_available():
+            self.device = torch.cuda.current_device()
+            self.model = torch.nn.DataParallel(self.model).to(self.device)
