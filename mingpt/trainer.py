@@ -53,7 +53,17 @@ class Trainer:
         raw_model = self.model.module if hasattr(self.model, "module") else model
         optimizer = raw_model.configure_optimizers(config)
 
-        #def run_epoch()
+        def run_epoch(split):
+            is_train = split == 'train'
+            model.train(is_train)
+            data = self.train_dataset if is_train else self.test_dataset
+            data = DataLoader(
+                data,
+                pin_memory=True,
+                num_workers=config.num_workers,
+                shuffle=True,
+                batch_size=config.batch_size
+            )
 
         best_loss = float('inf')
         self.tokens = 0
