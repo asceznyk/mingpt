@@ -57,13 +57,16 @@ class Trainer:
             is_train = split == 'train'
             model.train(is_train)
             data = self.train_dataset if is_train else self.test_dataset
-            data = DataLoader(
+            loader = DataLoader(
                 data,
                 pin_memory=True,
                 num_workers=config.num_workers,
                 shuffle=True,
                 batch_size=config.batch_size
             )
+
+            losses = []
+            pbar = tqdm(loader, total=len(loader)) if is_train else tqdm(loader)
 
         best_loss = float('inf')
         self.tokens = 0
