@@ -48,4 +48,23 @@ class Trainer:
         logger.info("saving %s", self.config.ckpt_path)
         torch.save(raw_model.state_dict(), self.config.ckpt_path)
 
-    #def train(self):
+    def train(self):
+        model, config = self.model, self.config
+        raw_model = self.model.module if hasattr(self.model, "module") else model
+        optimizer = raw_model.configure_optimizers(config)
+
+        #def run_epoch()
+
+        best_loss = float('inf')
+        self.tokens = 0
+
+        for e in range(self.config.max_epochs):
+            run_epoch('train')
+
+            if self.test_dataset is not None:
+                test_loss = run_epoch('test')
+
+        good_model = self.test_dataset is None or test_loss < best_loss
+        if self.config.ckpt_path is not None and good_model:
+            best_loss = test_loss
+            self.save_checkpoint()
