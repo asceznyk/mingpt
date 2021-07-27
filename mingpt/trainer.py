@@ -85,9 +85,9 @@ class Trainer:
                     if config.lr_decay:
                         self.tokens = (y >= 0).sum()
                         if self.tokens < self.warmup_tokens:
-                            lr_coeff = self.tokens / max(1, self.warmup_tokens)
+                            lr_coeff = float(self.tokens) / float(max(1, self.warmup_tokens))
                         else:
-                            p = (self.tokens - self.warmup_tokens) / max(1, (self.final_tokens - self.warmup_tokens))
+                            p = float(self.tokens - self.warmup_tokens) / float(max(1, (self.final_tokens - self.warmup_tokens)))
                             lr_coeff = max(0.1, 0.5 * (1 + math.cos(p * math.pi)))
                         lr = config.learning_rate * lr_coeff
                         for pg in optimizer.param_groups:
