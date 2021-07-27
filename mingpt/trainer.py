@@ -66,7 +66,30 @@ class Trainer:
             )
 
             losses = []
-            pbar = tqdm(loader, total=len(loader)) if is_train else tqdm(loader)
+            pbar = tqdm(enumerate(loader), total=len(loader)) if is_train else tqdm(enumerate(loader))
+            for i, (x, y) in pbar:
+                x = x.to(self.device)
+                y = y.to(self.device)
+
+                with torch.set_grad_enabled(is_train):
+                    logits, loss = model(x, y)
+                    loss = loss.mean() # only makes sense when there are multiple gpus
+                    losses.append(loss.item())
+
+                if is_train:
+                    model.zero_grad()
+                    loss.backward()
+                    torch.nn.utils.clip_grad_norm_(model.parameters(), config.grad_norm_clip)
+                    optimizer.step()
+
+                    if config.lr_decay:
+                        lr = config.learning_rate * lr_coeff
+                        for pg in optimizer.param_groups:
+                            pg['lr'] = lr
+                    else:
+                        lr =  config.learning_rate
+
+                     pbar.set_description(f"epoch {e+1} iter {i}: train loss {loss.item():.3f}. lr {lr:e}")
 
         best_loss = float('inf')
         self.tokens = 0
