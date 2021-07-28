@@ -95,7 +95,7 @@ class Trainer:
                     else:
                         lr =  config.learning_rate
 
-                     pbar.set_description(f"epoch {e+1} iter {i}: train loss {loss.item():.3f}. lr {lr:e}")
+                    pbar.set_description(f"epoch {e+1} iter {i}: train loss {loss.item():.3f}. lr {lr:e}")
 
         best_loss = float('inf')
         self.tokens = 0
