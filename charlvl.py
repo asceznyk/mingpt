@@ -11,6 +11,8 @@ from mingpt.model import *
 from mingpt.utils import *
 from mingpt.trainer import *
 
+set_seed(42)
+
 class CharDataset(Dataset):
     def __init__(self, data, block_size):
         chars = sorted(list(set(data)))
