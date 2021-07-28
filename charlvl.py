@@ -43,9 +43,12 @@ train_dataset = CharDataset(text, block_size)
 mcfg = GPTConfig(train_dataset.vocab_size, train_dataset.block_size, n_layer=8, n_heads=8, n_embd=512)
 model = GPT(mcfg)
 
-tcfg = TrainerConfig(max_epochs=2, batch_size=128, learning_rate=6e-4, lr_decay=True, warmup_tokens=128*20, final_tokens=2*len(train_dataset)*block_size, num_workers=2)
+tcfg = TrainerConfig(max_epochs=2, batch_size=128, learning_rate=6e-4, lr_decay=True, warmup_tokens=128*20, final_tokens=2*len(train_dataset)*block_size, num_workers=2, ckpt_path='shakespeare.model.cpkt')
 trainer = Trainer(model, train_dataset, None, tcfg)
 trainer.train()
 
-
+context = 'O God, O God!'
+x = torch.tensor([train_dataset.stoi[s] for s in context])[None, :].to(trainer.device)
+y = sample(model, x, 2500, temp=1.0, top_k=10)[0]
+completion = ''.join([train_dataset.itos[i] for i in y])
 

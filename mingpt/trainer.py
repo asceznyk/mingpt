@@ -97,14 +97,14 @@ class Trainer:
 
                     pbar.set_description(f"epoch {e+1} iter {i}: train loss {loss.item():.3f}. lr {lr:e}")
 
+            return loss
+
         best_loss = float('inf')
         self.tokens = 0
 
         for e in range(config.max_epochs):
-            run_epoch('train')
-
-            if self.test_dataset is not None:
-                test_loss = run_epoch('test')
+            train_loss = run_epoch('train')
+            test_loss = run_epoch('test') if self.test_dataset is not None else train_loss
 
         good_model = self.test_dataset is None or test_loss < best_loss
         if self.config.ckpt_path is not None and good_model:
