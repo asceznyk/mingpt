@@ -1,5 +1,7 @@
 import torch
 
+from torch.utils.data import Dataset
+
 class CharDataset(Dataset):
     def __init__(self, data, block_size):
         chars = sorted(list(set(data)))
