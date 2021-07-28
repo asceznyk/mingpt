@@ -10,6 +10,8 @@ import torch.optim as optim
 from torch.optim.lr_scheduler import LambdaLR
 from torch.utils.data.dataloader import DataLoader
 
+from datasets import *
+
 device = torch.cuda.current_device() if torch.cuda.is_available() else 'cpu'
 test_dataset = CharDataset(open(sys.argv[1], 'r').read(), 128)
 

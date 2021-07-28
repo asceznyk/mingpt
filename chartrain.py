@@ -13,30 +13,9 @@ from mingpt.model import *
 from mingpt.utils import *
 from mingpt.trainer import *
 
+from datasets import *
+
 set_seed(42)
-
-class CharDataset(Dataset):
-    def __init__(self, data, block_size):
-        chars = sorted(list(set(data)))
-        data_size, vocab_size = len(data), len(chars)
-        print('data has %d characters, %d unique.' % (data_size, vocab_size))
-
-        self.stoi = { ch:i for i,ch in enumerate(chars) }
-        self.itos = { i:ch for i,ch in enumerate(chars) }
-        self.block_size = block_size
-        self.vocab_size = vocab_size
-        self.data = data
-
-    def __len__(self):
-        return len(self.data) - self.block_size
-
-    def __getitem__(self, idx):
-        chunk = self.data[idx:idx + self.block_size + 1]
-        dix = [self.stoi[s] for s in chunk]
-        x = torch.tensor(dix[:-1], dtype=torch.long)
-        y = torch.tensor(dix[1:], dtype=torch.long)
-
-        return x, y
 
 block_size = 128
 text = open(sys.argv[1], 'r').read()
