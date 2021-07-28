@@ -84,10 +84,10 @@ class Trainer:
 
                     if config.lr_decay:
                         self.tokens = (y >= 0).sum()
-                        if self.tokens < self.warmup_tokens:
-                            lr_coeff = float(self.tokens) / float(max(1, self.warmup_tokens))
+                        if self.tokens < config.warmup_tokens:
+                            lr_coeff = float(self.tokens) / float(max(1, config.warmup_tokens))
                         else:
-                            p = float(self.tokens - self.warmup_tokens) / float(max(1, (self.final_tokens - self.warmup_tokens)))
+                            p = float(self.tokens - config.warmup_tokens) / float(max(1, (config.final_tokens - config.warmup_tokens)))
                             lr_coeff = max(0.1, 0.5 * (1 + math.cos(p * math.pi)))
                         lr = config.learning_rate * lr_coeff
                         for pg in optimizer.param_groups:
@@ -100,7 +100,7 @@ class Trainer:
         best_loss = float('inf')
         self.tokens = 0
 
-        for e in range(self.config.max_epochs):
+        for e in range(config.max_epochs):
             run_epoch('train')
 
             if self.test_dataset is not None:
