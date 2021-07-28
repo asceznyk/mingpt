@@ -83,7 +83,7 @@ class Trainer:
                     optimizer.step()
 
                     if config.lr_decay:
-                        self.tokens = (y >= 0).sum()
+                        self.tokens += (y >= 0).sum()
                         if self.tokens < config.warmup_tokens:
                             lr_coeff = float(self.tokens) / float(max(1, config.warmup_tokens))
                         else:
