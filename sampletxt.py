@@ -29,3 +29,5 @@ x = torch.tensor([test_dataset.stoi[s] for s in context])[None, :].to(device)
 y = sample(model, x, 2500, temp=1.0, top_k=10)[0]
 completion = ''.join([test_dataset.itos[int(i)] for i in y])
 
+print(completion)
+
