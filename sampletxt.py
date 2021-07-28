@@ -24,7 +24,7 @@ model = GPT(mcfg)
 model.load_state_dict(torch.load(sys.argv[2]))
 model = model.to(device)
 
-context = 'O God, O God!'
+context = sys.argv[3]
 x = torch.tensor([test_dataset.stoi[s] for s in context])[None, :].to(device)
 y = sample(model, x, 2500, temp=1.0, top_k=10)[0]
 completion = ''.join([test_dataset.itos[int(i)] for i in y])
