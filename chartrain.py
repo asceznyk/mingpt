@@ -45,7 +45,7 @@ train_dataset = CharDataset(text, block_size)
 mcfg = GPTConfig(train_dataset.vocab_size, train_dataset.block_size, n_layer=8, n_heads=8, n_embd=512)
 model = GPT(mcfg)
 
-tcfg = TrainerConfig(max_epochs=2, batch_size=128, learning_rate=6e-4, lr_decay=True, warmup_tokens=128*20, final_tokens=2*len(train_dataset)*block_size, num_workers=2, ckpt_path='char.model.cpkt')
+tcfg = TrainerConfig(max_epochs=2, batch_size=128, learning_rate=6e-4, lr_decay=True, warmup_tokens=128*20, final_tokens=2*len(train_dataset)*block_size, num_workers=2, ckpt_path='char.model.ckpt')
 trainer = Trainer(model, train_dataset, None, tcfg)
 trainer.train()
 
