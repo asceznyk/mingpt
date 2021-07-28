@@ -10,6 +10,10 @@ import torch.optim as optim
 from torch.optim.lr_scheduler import LambdaLR
 from torch.utils.data.dataloader import DataLoader
 
+from mingpt.model import *
+from mingpt.utils import *
+from mingpt.trainer import *
+
 from datasets import *
 
 device = torch.cuda.current_device() if torch.cuda.is_available() else 'cpu'
