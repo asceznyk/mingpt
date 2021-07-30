@@ -34,7 +34,9 @@ def sample_text(options):
     y = sample(model, x, options.gen_len, temp=options.temperature, top_k=options.top_k)[0]
     completion = ''.join([char_data.itos[int(i)] for i in y])
 
+    print('='*40)
     print(completion)
+    print('='*40)
 
 
 if __name__ == '__main__':

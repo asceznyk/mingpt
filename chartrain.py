@@ -20,28 +20,27 @@ def train_char_lvl(options):
     set_seed(42)
 
     block_size = options.sequence_length
+    batch_size = options.batch_size
     train_dataset = CharDataset(open(options.txt, 'r').read(), block_size)
 
     mcfg = GPTConfig(train_dataset.vocab_size, train_dataset.block_size, n_layer=8, n_heads=8, n_embd=512)
     model = GPT(mcfg)
-    if options.pretrained_weights is not None:
-        model.load_state_dict(torch.load(options.pretrained_weights))
 
-    torch.save(train_dataset, 'char.dataset.pt')
-    train_dataset = torch.load('char.dataset.pt')
+    torch.save(train_dataset, options.char_data)
 
-    tcfg = TrainerConfig(max_epochs=2, batch_size=128, learning_rate=6e-4, lr_decay=True, warmup_tokens=128*20, final_tokens=2*len(train_dataset)*block_size, num_workers=2, ckpt=options.ckpt)
+    tcfg = TrainerConfig(max_epochs=options.n_epochs, batch_size=batch_size, learning_rate=6e-4, lr_decay=True, warmup_tokens=batch_size*20, final_tokens=2*len(train_dataset)*block_size, num_workers=options.n_workers, ckpt=options.ckpt)
     trainer = Trainer(model, train_dataset, None, tcfg)
     trainer.train()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--txt', type=str, help='path to text file for training data')
-    parser.add_argument('--sequence_length', type=int, help='max. length of sequence', default=128)
+    parser.add_argument('--sequence_length', type=int, help='max length of sequence', default=128)
     parser.add_argument('--ckpt', type=str, help='path for saving model weights', default='char.model.ckpt')
-    parser.add_argument('--char_data', type=str, help='path for saving the character level dataset which has string-to-index mapping required for the model')
-    parser.add_argument('--pretrained_weights', type=str, help='path to pre-trained weights file', default=None)
-
+    parser.add_argument('--char_data', type=str, help='path for saving the character level dataset which has string-to-index mapping required for the model', default='char.dataset.pt')
+    parser.add_argument('--n_epochs', type=int help='number of epochs to train the model', default=2)
+    parser.add_argument('--batch_size', type=int help='batch size', default=128)
+    parser.add_argument('--n_workers', type=int, help='num workers', default=2)
 
     options = parser.parse_args()
 
