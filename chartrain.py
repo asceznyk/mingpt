@@ -38,8 +38,8 @@ if __name__ == '__main__':
     parser.add_argument('--sequence_length', type=int, help='max length of sequence', default=128)
     parser.add_argument('--ckpt', type=str, help='path for saving model weights', default='char.model.ckpt')
     parser.add_argument('--char_data', type=str, help='path for saving the character level dataset which has string-to-index mapping required for the model', default='char.dataset.pt')
-    parser.add_argument('--n_epochs', type=int help='number of epochs to train the model', default=2)
-    parser.add_argument('--batch_size', type=int help='batch size', default=128)
+    parser.add_argument('--n_epochs', type=int, help='number of epochs to train the model', default=2)
+    parser.add_argument('--batch_size', type=int, help='batch size', default=128)
     parser.add_argument('--n_workers', type=int, help='num workers', default=2)
 
     options = parser.parse_args()
