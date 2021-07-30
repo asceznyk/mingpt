@@ -18,26 +18,35 @@ from mingpt.trainer import *
 from datasets import *
 
 def sample_text(options):
-    test_dataset = CharDataset(open(options.txt, 'r').read(), 128)
+    assert options.weights is not None, 'model weights file path not given!'
+    assert options.char_data is not None, 'char_data path is not given!'
 
-    mcfg = GPTConfig(test_dataset.vocab_size, test_dataset.block_size, n_layer=8, n_heads=8, n_embd=512)
+    char_data = torch.load(options.char_data_path)
+    mcfg = GPTConfig(char_data.vocab_size, char_data.block_size, n_layer=8, n_heads=8, n_embd=512)
     model = GPT(mcfg)
-    model.load_state_dict(torch.load(options.weights_path))
+    model.load_state_dict(torch.load(options.weights))
 
-    context = sys.argv[3]
-    x = torch.tensor([test_dataset.stoi[s] for s in context])[None, :].to(device)
-    y = sample(model, x, 2500, temp=1.0, top_k=10)[0]
-    completion = ''.join([test_dataset.itos[int(i)] for i in y])
+    context = options.context
+    x = torch.tensor([char_data.stoi[s] for s in context])[None, :].to(device)
+    y = sample(model, x, options.gen_len, temp=options.temperature, top_k=options.top_k)[0]
+    completion = ''.join([char_data.itos[int(i)] for i in y])
+
+    print(completion)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--txt', type=str, help='path to text file for initailzing test data')
-    parser.add_argument('--weights_path', type=str, help='path to model weights file')
-
+    parser.add_argument('--context', type=str, help='context for model to predict on', default='fuck you for not giving context!')
+    parser.add_argument('--weights', type=str, help='path to trained model weights file (required)', default=None)
+    parser.add_argument('--char_data', type=str, help='path to dataset containing string-to-index mapping (required)', default=None)
+    parser.add_argument('--gen_len', type=int, help='generated sequence length', default=2500)
+    parser.add_argument('--top_k', type=int, help='top k chars to select while predicting', default=10)
+    parser.add_argument('--temperature', type=int, help='logits enchancement!', default=1.0)
 
     options = parser.parse_args()
 
     print(options)
+
+    sample_text(options)
 
 

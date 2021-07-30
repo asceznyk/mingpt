@@ -30,7 +30,7 @@ def train_char_lvl(options):
     torch.save(train_dataset, 'char.dataset.pt')
     train_dataset = torch.load('char.dataset.pt')
 
-    tcfg = TrainerConfig(max_epochs=2, batch_size=128, learning_rate=6e-4, lr_decay=True, warmup_tokens=128*20, final_tokens=2*len(train_dataset)*block_size, num_workers=2, ckpt_path=options.ckpt_path)
+    tcfg = TrainerConfig(max_epochs=2, batch_size=128, learning_rate=6e-4, lr_decay=True, warmup_tokens=128*20, final_tokens=2*len(train_dataset)*block_size, num_workers=2, ckpt=options.ckpt)
     trainer = Trainer(model, train_dataset, None, tcfg)
     trainer.train()
 
@@ -38,8 +38,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--txt', type=str, help='path to text file for training data')
     parser.add_argument('--sequence_length', type=int, help='max. length of sequence', default=128)
-    parser.add_argument('--ckpt_path', type=str, help='path for saving model weights', default='char.model.ckpt')
+    parser.add_argument('--ckpt', type=str, help='path for saving model weights', default='char.model.ckpt')
+    parser.add_argument('--char_data', type=str, help='path for saving the character level dataset which has string-to-index mapping required for the model')
     parser.add_argument('--pretrained_weights', type=str, help='path to pre-trained weights file', default=None)
+
 
     options = parser.parse_args()
 
