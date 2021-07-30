@@ -1,5 +1,6 @@
 import sys
 import math
+import argparse
 
 import numpy as np
 
@@ -39,7 +40,6 @@ if __name__ == '__main__':
     parser.add_argument('--sequence_length', type=str, help='max. length of sequence', default=128)
     parser.add_argument('--ckpt', type=str, help='path for saving model weights', default='char.model.ckpt')
     parser.add_argument('--pretrained_weights', type=str, help='path to pre-trained weights file', default=None)
-
 
     options = parser.parse_args()
 
