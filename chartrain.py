@@ -37,7 +37,7 @@ def train_char_lvl(options):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--txt', type=str, help='path to text file for training data')
-    parser.add_argument('--sequence_length', type=str, help='max. length of sequence', default=128)
+    parser.add_argument('--sequence_length', type=int, help='max. length of sequence', default=128)
     parser.add_argument('--ckpt', type=str, help='path for saving model weights', default='char.model.ckpt')
     parser.add_argument('--pretrained_weights', type=str, help='path to pre-trained weights file', default=None)
 
