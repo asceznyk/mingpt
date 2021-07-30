@@ -27,6 +27,7 @@ def sample_text(options):
     mcfg = GPTConfig(char_data.vocab_size, char_data.block_size, n_layer=8, n_heads=8, n_embd=512)
     model = GPT(mcfg)
     model.load_state_dict(torch.load(options.weights))
+    model = model.to(device)
 
     context = options.context
     x = torch.tensor([char_data.stoi[s] for s in context])[None, :].to(device)
