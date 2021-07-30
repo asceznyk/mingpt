@@ -21,7 +21,7 @@ def sample_text(options):
     assert options.weights is not None, 'model weights file path not given!'
     assert options.char_data is not None, 'char_data path is not given!'
 
-    char_data = torch.load(options.char_data_path)
+    char_data = torch.load(options.char_data)
     mcfg = GPTConfig(char_data.vocab_size, char_data.block_size, n_layer=8, n_heads=8, n_embd=512)
     model = GPT(mcfg)
     model.load_state_dict(torch.load(options.weights))
