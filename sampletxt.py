@@ -40,7 +40,6 @@ def sample_text(options):
     print('='*40)
     print('')
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--context', type=str, help='context for model to predict on', default='fuck you for not giving context!')

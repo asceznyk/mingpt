@@ -27,6 +27,7 @@ def train_char_lvl(options):
     model = GPT(mcfg)
 
     torch.save(train_dataset, options.char_data)
+    print('saved train char dataset..')
 
     tcfg = TrainerConfig(max_epochs=options.n_epochs, batch_size=batch_size, learning_rate=6e-4, lr_decay=True, warmup_tokens=batch_size*20, final_tokens=2*len(train_dataset)*block_size, num_workers=options.n_workers, ckpt=options.ckpt)
     trainer = Trainer(model, train_dataset, None, tcfg)
