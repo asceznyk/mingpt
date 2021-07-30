@@ -53,6 +53,8 @@ class Trainer:
         raw_model = self.model.module if hasattr(self.model, "module") else model
         optimizer = raw_model.configure_optimizers(config)
 
+        print(self.ckpt_path)
+
         def run_epoch(split):
             is_train = split == 'train'
             model.train(is_train)
