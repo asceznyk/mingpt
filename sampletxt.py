@@ -4,8 +4,6 @@ import argparse
 
 import numpy as np
 
-from tqdm import tqdm
-
 import torch
 
 from mingpt.model import *
