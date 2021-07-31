@@ -4,11 +4,7 @@ import argparse
 
 import numpy as np
 
-from random import randint
-
 import torch
-
-from torch.utils.data import Dataset
 
 from mingpt.model import *
 from mingpt.utils import *
