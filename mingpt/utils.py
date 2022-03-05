@@ -25,7 +25,6 @@ def sample(model, x, steps, temp=1.0,  sample=False, top_k=None):
     block_size = model.get_block_size()
     for i in range(steps):
         x_ctx = x if x.size(1) <= block_size else x[:, -block_size:]
-
         logits, _ = model(x_ctx)
         logits = logits[:, -1, :] / max(0.1, temp)
 

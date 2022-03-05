@@ -18,10 +18,10 @@ class CharDataset(Dataset):
         return len(self.data) - self.block_size
 
     def __getitem__(self, idx):
-        chunk = self.data[idx:idx + self.block_size + 1]
-        dix = [self.stoi[s] for s in chunk]
-        x = torch.tensor(dix[:-1], dtype=torch.long)
-        y = torch.tensor(dix[1:], dtype=torch.long)
+        chunk = self.data[idx : idx+self.block_size+1]
+        idx = [self.stoi[s] for s in chunk]
+        x = torch.tensor(idx[:-1], dtype=torch.long)
+        y = torch.tensor(idx[1:], dtype=torch.long)
 
         return x, y
 
